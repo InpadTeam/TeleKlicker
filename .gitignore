@@ -90,5 +90,7 @@ ENV/
 
 # Config file
 config.py
-users/
 
+# Other
+users/
+*.sublime-workspace
