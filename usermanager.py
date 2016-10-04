@@ -60,6 +60,24 @@ def message(uid, reply, text):
 		usr.message(reply, text)
 		save_user(usr)
 
+def setname(uid, reply):
+	usr = get_user(uid)
+
+	if not usr:
+		reply('Что-то пошло не так. Попробуй /start')
+	else:
+		usr.setname(reply)
+		save_user(usr)
+
+def setpartyname(uid, reply):
+	usr = get_user(uid)
+
+	if not usr:
+		reply('Что-то пошло не так. Попробуй /start')
+	else:
+		usr.setpartyname(reply)
+		save_user(usr)
+
 def newparty(uid, reply):
 	usr = get_user(uid)
 
@@ -67,6 +85,15 @@ def newparty(uid, reply):
 		reply('Что-то пошло не так. Попробуй /start')
 	else:
 		usr.newparty(reply)
+		save_user(usr)
+
+def sayparty(uid, reply):
+	usr = get_user(uid)
+
+	if not usr:
+		reply('Что-то пошло не так. Попробуй /start')
+	else:
+		usr.sayparty(reply)
 		save_user(usr)
 
 def leave(uid, reply):

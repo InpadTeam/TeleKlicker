@@ -51,9 +51,6 @@ def debug(bot, update):
 	inf = usermanager.debug_info(update.message.chat_id)
 	bot.sendMessage(update.message.chat_id, text=inf)
 
-def setname(bot, update):
-	usermanager.setname(update.message.chat_id, generate_reply(bot, update.message))
-
 def button(bot, update):
 	query = update.callback_query
 
@@ -69,6 +66,15 @@ def button(bot, update):
 
 def newparty(bot, update):
 	usermanager.newparty(update.message.chat_id, generate_reply(bot, update.message))
+
+def setname(bot, update):
+	usermanager.setname(update.message.chat_id, generate_reply(bot, update.message))
+
+def setpartyname(bot, update):
+	usermanager.setpartyname(update.message.chat_id, generate_reply(bot, update.message))
+
+def sayparty(bot, update):
+	usermanager.sayparty(update.message.chat_id, generate_reply(bot, update.message))
 
 def share(bot, update):
 	usr = usermanager.get_user(update.message.chat_id)
@@ -117,7 +123,10 @@ updater = Updater(config.TOKEN)
 
 logging.info('2...')
 
+updater.dispatcher.add_handler(CommandHandler('setpartyname', setpartyname))
 updater.dispatcher.add_handler(CommandHandler('newparty', newparty))
+updater.dispatcher.add_handler(CommandHandler('sayparty', sayparty))
+updater.dispatcher.add_handler(CommandHandler('setname', setname))
 updater.dispatcher.add_handler(CommandHandler('share', share))
 updater.dispatcher.add_handler(CommandHandler('start', start))
 updater.dispatcher.add_handler(CommandHandler('debug', debug))

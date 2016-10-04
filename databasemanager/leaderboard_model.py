@@ -38,12 +38,12 @@ def get_model(db):
 	def add_to_leaderboard(cls, item, leaderboard_name='users'):
 		if leaderboard_name == USERS_TABLE:
 			doc = {
-				'uid': item.uid,
+				'uid': str(item.uid),
 				'score': item.points,
 				'leaderboard': USERS_TABLE,
 			}
 			try:
-				old_record = cls.find_one({'uid': ittem.uid})
+				old_record = cls.find_one({'uid': str(item.uid)})
 				old_record.update(doc)
 				old_record.save()
 			except:

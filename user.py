@@ -91,21 +91,21 @@ class User(object):
 
 		for i, sc in enumerate(scores):
 			if name == 'parties':
-				recrd = '{0}. {1}(@{2}): {3}\n'
+				recrd = '{0}. {1}: {3}\n@{2} says: {4}\n'
 				party = partymanager.get_party(sc['code_name'])
 
-				msg += recrd.format(i+1, party['name'], party['leader'], party['points'])
+				msg += recrd.format(i+1, party['name'], party['leader'], party['points'], party['slogan'])
 			else:
 				usr = usermanager.get_user(sc['uid'])
 
 				if usr.nickname is not None:
-					recrd = '{0}. {1}(@{2}): {3}\n'
+					recrd = '{0}. {1} (@{2}): {3}\n'
 					msg += recrd.format(i+1, usr.name, usr.nickname, usr.points)
 				else:
 					recrd = '{0}. {1}: {2}\n'
 					msg += recrd.format(i+1, usr.name, usr.points)
 
-		reply(msg)
+		reply(msg, self.get_buttons())
 
 
 	def newparty(self, reply, text=None):
@@ -123,9 +123,60 @@ class User(object):
 			else:
 				reply('Party name shold contain *only* Latin letters, numbers and space')
 
+	def setname(self, reply, text=None):
+		if text is None:
+			reply('Write your new name.')
+			self.state = 'setname'
+		else:
+			if check(text) and len(text) > 3 and len(text) < 15:
+				self.name = text
+				self.start(reply)
+			else:
+				reply('Unsupported name :(')
+
+	def sayparty(self, reply, text=None):
+		if text is None:
+			if str(self.party) == str(self.uid):
+				reply('What your fiends will see?')
+				self.state = 'sayparty'
+			else:
+				reply('You aren\'t party leader!')
+		else:
+			if len(text) > 0 and len(text) < 140:
+				party = partymanager.get_party(self.party)
+				party['slogan'] = text
+				databasemanager.set_party(self.party, party)
+
+				self.start(reply)
+			else:
+				reply('Unsupported text :(')
+
+	def setpartyname(self, reply, text=None):
+		if text is None:
+			if self.party:
+				reply('Write your new party name.')
+				self.state = 'setpartyname'
+			else:
+				reply('You have no party!')
+		else:
+			if check(text):
+				party = partymanager.get_party(self.party)
+				party['name'] = text
+				databasemanager.set_party(self.party, party)
+
+				self.start(reply)
+			else:
+				reply('Unsupported name :(')
+
 	def message(self, reply, text):
 		if self.state == 'newparty':
 			self.newparty(reply, text)
+		if self.state == 'setname':
+			self.setname(reply, text)
+		if self.state == 'setpartyname':
+			self.setpartyname(reply, text)
+		if self.state == 'sayparty':
+			self.sayparty(reply, text)
 		elif text.startswith('/join___'):
 			party_code = text[len('/join___'):]
 
