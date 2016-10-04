@@ -92,7 +92,7 @@ def inlinequery(bot, update):
 	query = update.inline_query.query
 	results = list()
 
-	share_msg = 'Common and click some buttons:\n@klickertestbot'
+	share_msg = 'Common and click some buttons:\n@klickerbot'
 
 	results.append(InlineQueryResultArticle(id=uuid4(),
 											title="Share the bot",
